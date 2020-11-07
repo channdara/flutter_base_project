@@ -13,7 +13,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(StringUtil.getText(context, LocaleKey.settings)),
+        title: Text(StringUtil.getString(context, LocaleKey.settings)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     ),
                     onPressed: () {
-                      application.changeLanguageCallback(const Locale('en'));
+                      application.translator.translate('en');
                     },
                     child: const Text('English'),
                   ),
@@ -43,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     ),
                     onPressed: () {
-                      application.changeLanguageCallback(const Locale('ja'));
+                      application.translator.translate('ja');
                     },
                     child: const Text('Japanese'),
                   ),

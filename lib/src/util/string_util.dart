@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutterapp/config/localization/translator.dart';
+import 'package:flutterapp/config/application.dart';
 
 mixin StringUtil {
-  static String getText(BuildContext context, String key) =>
-      Translator.of(context).getString(key);
+  static String getString(BuildContext context, String key) =>
+      application.translator.getString(context, key);
 }

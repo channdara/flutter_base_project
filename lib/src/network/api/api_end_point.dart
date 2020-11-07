@@ -1,14 +1,12 @@
 class APIEndPoint {
   factory APIEndPoint(String apiBaseUrl) {
-    _instance._apiBaseUrl = apiBaseUrl;
-    return _instance;
+    instance._apiBaseUrl = apiBaseUrl;
+    return instance;
   }
 
   APIEndPoint._internal();
 
-  static final APIEndPoint _instance = APIEndPoint._internal();
-
-  static APIEndPoint get instance => _instance;
+  static final APIEndPoint instance = APIEndPoint._internal();
 
   String _apiBaseUrl;
 

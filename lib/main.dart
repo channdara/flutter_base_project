@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutterapp/config/app_config.dart';
 import 'package:flutterapp/config/app_route.dart';
 import 'package:flutterapp/config/application.dart';
-import 'package:flutterapp/config/localization/translator_delegate.dart';
 import 'package:flutterapp/src/network/api/api_end_point.dart';
-import 'package:flutterapp/src/util/shared_pref_util.dart';
 
 class MainApp extends StatefulWidget {
   @override
@@ -14,13 +11,10 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  TranslatorDelegate _translatorDelegate = const TranslatorDelegate(null);
-
   @override
   void initState() {
-    _setupSystem();
-    _translateLanguage();
-    application.changeLanguageCallback = _changeLanguageCallback;
+    _initSystem();
+    _initTranslator();
     super.initState();
   }
 
@@ -34,41 +28,30 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.blue),
-      localizationsDelegates: [
-        _translatorDelegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: application.supportedLocales,
+      localizationsDelegates: application.translator.localizationsDelegates,
+      supportedLocales: application.translator.supportedLocales,
       navigatorKey: application.navigatorKey,
       routes: AppRoute.routes,
       initialRoute: AppRoute.SPLASH_SCREEN,
     );
   }
 
-  Future<void> _setupSystem() async {
+  Future<void> _initSystem() async {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark,
     ));
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
-  void _changeLanguageCallback(Locale locale) {
-    SharedPrefUtil.setValue(
-      PrefType.STRING,
-      PrefKey.LANGUAGE_CODE,
-      locale.languageCode,
+  void _initTranslator() {
+    application.translator.init(
+      supportedLanguageCodes: ['en', 'ja'],
+      initLanguageCode: 'en',
     );
-    setState(() {
-      _translatorDelegate = TranslatorDelegate(locale);
-    });
+    application.translator.onTranslatedLanguage = _onTranslatedLanguage;
   }
 
-  Future<void> _translateLanguage() async {
-    final code = await SharedPrefUtil.getString(PrefKey.LANGUAGE_CODE);
-    setState(() {
-      _translatorDelegate = TranslatorDelegate(Locale(code ?? 'en'));
-    });
+  void _onTranslatedLanguage(Locale locale) {
+    setState(() {});
   }
 }
